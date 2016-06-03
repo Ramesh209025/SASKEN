@@ -1,0 +1,403 @@
+AngularJS
+---------
+
+	MEAN Architecture
+
+	M --> MongoDB
+	E --> Express
+	A --> AngularJS
+	N --> NodeJS
+
+
+	RWD (Responsive Web Design ) and SPA ( Single Page Application)
+
+	For RWD we use CSS3 (@media query rule) or use Bootstrap
+
+	Challenges faced while building SPA:
+
+	a) Data binding (Support for 2 way binding)
+	b) Routing
+	c) Dependency Injection ( Inversion Of Control)
+	d) Cache
+	e) Client side session Management
+
+	--------------------------------------------------
+
+	AngularJS
+		has the following modules:
+		1) Config
+		2) Controller
+		3) Services [ Service, factory, provider, value]
+		4) filters
+		5) directive
+
+
+		JS files:
+		1) 	angular.min.js or  angular.js
+ 
+	 	2) angular-route.js
+	 		basic routing api
+	 	3) jquery.js
+	 		not required for Angular.
+	 		AngularJS comes built-in with jqLite
+
+	 		Included for bootstrap
+	 	4) bootstrap.js for RWD
+
+	 	Directive: ngApp
+	 	ng-app
+	 	or
+	 	data-ng-app
+	 	or
+	 	ng_app
+	 	or
+	 	data_ng_app
+	 	or
+	 	x-ng-app
+
+
+	 	Programmatially bootstraping
+
+	 	is done as below:
+
+	 	<script type="text/JavaScript">
+	 		angular.element(document).ready(function(){
+	 			angular.bootstrap(document.body,["customer_app"]);
+	 		});
+	 	</script>
+
+
+
+
+	 	ng-app="customer_app"
+
+--------------------------------------------------------------
+
+
+
+	Recap
+	-----
+
+	1) Bootstrap for RWD
+		important css class:
+			container, col-xx-no, row, pull-left, pull-right
+
+	2) Angular for SPA
+
+		a) Boostraping
+
+			ng-app 
+				or
+			angular.bootstrap(elem,["module"]);
+
+		b) controller
+			binding ---> ng-controller
+		c) $scope
+			is a service to access scope variable of that controller
+			it is DInjected into controller function
+
+			Acts like a glue code between Controller and views
+		d) Expression
+			{{}} is used for one-way binding between controller and view
+
+			or other way is
+
+			<span ng-bind="customer.firstName"></span>
+
+			is same as
+			<span>{{customer.firstName}}</span>	
+
+		e) Two-way binding
+
+			ng-model
+
+		f) Event handling:
+				ng-click
+
+		g) Directives:
+			ng-show, ng-hide, ng-if, ng-repeat
+			ng-app, ng-controller, ng-bind
+
+$('.ng-scope').css({'border':'2px solid red'}).css({'margin':'1px'});
+
+$($0).scope().customer.firstName = "Test";
+
+$($0).scope().$digest();
+
+$($0).scope().$apply();
+
+
+----------------------------------------------------	
+
+Writing Modular code
+
+
+user defined Directives
+
+	Directives can be used as elements, attributes, class or comments
+
+
+	Example:
+
+	<employee></employee>  ELEMENT
+
+	<div employee></div>  ATTRIBUTE
+
+	<div class="employee"> </div> CLASS
+ 
+	<!-- div:employee -->
+
+json-server --static . --watch data.json
+
+
+ Loading data.json
+  Done
+
+  Resources
+  http://localhost:3000/customers
+  http://localhost:3000/orders
+
+  Home
+  http://localhost:3000
+
+  Type s + enter at any time to create a snapshot of the database
+
+
+---------------------------
+
+	Directives
+
+	Scope:
+	1) Shared
+	2) Inherited
+	3) isoloated scope
+
+
+	Compile stage and linking stage
+	
+
+
+
+
+
+
+	return {
+		restrict: 'A',
+		replace: true,
+		scope: {} , /* isoloated scope */
+		template :'<button style="background-color:{{color}}">Click</button>',
+		link: function(scope,elem,attr) {
+			elem.bind("click",function(){
+				scope.color = 'green';
+				scope.$apply();
+			})
+		}
+		}
+
+-------------
+	ISOLATED SCOPE
+
+<div class="cardHeader">
+	{{first}}
+	{{last}}
+	<a href="" class="pull-right cardClose" 
+	ng-click="remove(item)">
+		&times;
+	</a>
+</div>
+<div class="cardBody">
+	<img class="cardImage" 
+		ng-src="images/{{pic}}.png" />
+	<a href="" class="pull-right " 
+		ng-click="editForm(item)">
+		<span class="glyphicon glyphicon-edit"></span>
+	</a>
+</div>
+
+	<div ng-repeat="product in products">
+
+		<card-view first="customer.fistName" last="customer.lastName">
+
+		</card-view>
+	</div>
+
+
+	<div ng-repeat="customer in customers">
+
+		<card-view>
+
+		</card-view>
+	</div>
+----------------------------------------------------
+
+	Angular 
+	Controller
+	directive
+
+Service
+	Service is a singleton object
+	Internally Angular creates this object
+	lazily using Object.create();
+
+	Generally contains 
+	Code for REST calls,
+	it can also contain business logic
+	------------
+
+	GET
+	http://localhost:3000/customers
+
+	http://localhost:3000/customers/3
+
+	--> No payload
+
+	POST
+	http://localhost:3000/customers
+	Payload should contain the customer data
+
+
+
+	PUT
+	http://localhost:3000/customers/3
+
+	Payload should contain the customer data for 3
+
+	DELETE
+	No payload
+	http://localhost:3000/customers/3
+
+
+	Also you can use Query Param to fetch
+
+	http://localhost:3000/orders?customer=1
+
+	-----------------------------
+
+Synchronous call:
+
+var data = doTask();
+
+use data here
+
+ASynchronous call:
+doTask().then(function(result){
+	var data = result;	
+}, function(err){
+	
+});
+-------------------------
+
+	Service is singleton [ AJAX calls and Business logic]
+
+	factory is not singleton [ factories return functions or values and not an instance]
+
+	angular.module("customer_service")
+	.factory("CustomerService", function($http,$q){
+
+	function CustomerService() {
+
+	};
+
+	CustomerService.prototype.getCustomers = function() {
+		var deferred = $q.defer();
+		$http.get("http://localhost:3000/customers")
+			.then(function(result){
+				deferred.resolve(result);
+			}, function(result){
+				deferred.reject(result);
+			});
+		return deferred.promise;
+	};
+		return CustomerService;
+	};
+
+	In Controller we use
+
+	var customerService = new CustomerService();
+	customerService.getCustomers()....
+
+-------------------------------------------------------
+
+	
+	angular.module("sample_module",[]).filter("ordinal",function(){
+
+		return function(data) {
+			if(isNaN(data) || data < 0) {
+				return data;
+			} else {
+				var val = data % 10;
+
+				if(val==1) {
+					return data +"st";
+				} else (val == 2) {
+						return data +"nd";
+				} else (val == 3) {
+						return data +"rd";
+				} 
+			}
+		}
+	});
+
+	$scope.value = 3;
+
+	{{value | ordinal}}
+---------------------------------------------------------------
+
+
+	angular.module("sample_mod")
+	.controller("SampleController",function($scope){
+		$scope.customers = ....;
+	});
+
+	ng-controller="SampleController"
+
+
+	can be used as
+
+	angular.module("sample_mod")
+	.controller("SampleController",function( ){
+		this.customers = ....;
+	});
+
+
+	ng-controller="SampleController as sample"
+
+	ng-repeat = "customer in sample.customers"
+--------------
+
+1) copy authenticate.srv.js into "service" folder
+
+2) copy login.html into "page" folder
+
+3) modify "main.cfg.js"
+
+a) add
+
+	.when('/login')
+
+	add
+
+	function check(...) {
+
+	}
+----------------------------
+	a) Angular Router
+		is based on URL
+	b) UI-Router
+		is based on state
+		instead of 
+			$routeProvider we use
+			$stateProvider
+
+		Advantages:
+			1) Master-Child View
+			2) Multiple views
+
+------------------------
+
+npm install karma
+npm install karma-phantomjs-launcher 
+npm install karma-jasmine
+npm install karma-chrome-launcher
+
+
