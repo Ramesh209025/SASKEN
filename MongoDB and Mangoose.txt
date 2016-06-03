@@ -1,0 +1,212 @@
+
+mongo db
+--------
+	MongoDB -- > Humongous database
+	Uses BSON to store data.
+
+ RDBMS					MongoDB
+ database 				database
+ table	 				collections
+ row 					document
+ columns 				fields
+
+ MongoDB does not support 
+  transactions, relationship
+
+ Uses _id of type ObjectId as Primary Key.
+
+ -----------------------------
+
+ CRUD operations
+ ---------------
+ CREATE 
+ 	db.collections.insert();
+ 	db.collections.insertOne();
+ 	db.collections.insertMany();
+
+
+ Example:
+
+ 	db.users.insert({"name" : 'Danny', "age" : 22});
+
+ 	db.users.insertOne({"name" : 'Danny', "age" : 22});
+
+ 	db.users.insertMany(
+ 		{"name" : 'Danny', "age" : 22},
+ 		{"name" : 'Larry', "age" : 23}
+
+ 	);
+
+READ:
+
+	db.collections.find();
+	db.collections.find().pretty();
+
+	db.collections.find({/* clause */},
+		{/* projections */});
+
+
+Example:
+
+	db.users.find(); // returns first 20 records
+
+	> it   [ to get next set of 20 records]
+
+
+	db.users.find({'lastName' : 'Kumar'});
+
+	db.users.find({ 'age' : {$gt:20} });
+
+	$gt $lt $ne $gte $lte 
+
+
+
+	db.users.find({}, {'firstName' : 1, lastName : 1});
+
+
+
+	Limit no of documents:
+	db.users.find().limit(2);
+	db.users.findOne({}, {'firstName' : 1, lastName : 1});
+
+
+	Sort: [ 1 ascending, -1 is descending] 
+	db.users.find().sort({'lastName' : 1});
+
+
+--------
+	Update
+	db.users.update({"_id":1},{"firstName" : 'Smith'});
+
+
+mongod --dbpath ./data
+
+C:\Program Files\MongoDB\Server\3.2\bin>
+
+
+mongod --dbpath C:\Users\Banu Prakash\Desktop\SASKEN_WS\mongodata\data
+
+mongoimport --db sales_db --collection sales --drop --file sales.json
+
+
+ show dbs
+ use sales
+ db.sales.find().pretty();
+
+ >it  [ for next set of records]
+
+> var data = db.sales.find();
+> data.forEach(function(sales) { print(sales.category); } );
+
+db.sales.find({"category":"Seafood"}, 
+{"category":1,"product" : 1}).pretty();
+
+------------------------------
+
+	NODEJS app using "mongoose" driver to connect to mogodb
+	Global install
+	npm install mongoose -g
+	local install
+	npm install mongoose 
+------------------------
+
+Express 4.x
+
+npm install express
+
+npm install express-generator
+
+express customer_total
+
+
+G:\best\node_modules\express-generator\bin>node express g:\best\customer_total   
+
+
+db.customers.insertOne({
+       "id": 2,
+       "firstName": "Larry",
+        "lastName": "Page",
+        "gender": "male",
+       "orders": [
+         {
+           "product": "Moto G",
+           "price": 12990,
+           "quantity": 1
+         }
+        ]
+      });
+ 
+----------------------------------------
+
+	ionic
+
+	framework for Mobile applications
+
+	built using Apache Cordova [ phonegap ]
+
+
+	Steps:
+
+	npm install cordova 
+
+	npm install ionic
+
+	Create an app:
+	ionic start myapp tabs
+
+
+	Optionally:
+	ionic platform add android
+	
+	To test in Browser:
+	ionic serve
+
+	To test in simulator:
+	ionic emulate android
+
+------------------------------
+
+Testing Angular Code
+---------------------
+
+1) Unit Testing
+	
+	JASMINE/ MOCHA / Sinon
+	Chai / assert libraries [ assertions ]
+
+
+	KARMA is a Test Runner
+
+2) E2E Testing 
+
+	PROTRACTOR
+
+	uses selenium
+
+
+
+3 As [ Assemble ,action and Assert]
+
+
+npm install karma 
+
+ 
+npm install karma-jasmine
+
+npm install karma-chrome-launcher  
+
+npm install karma-phantomjs-launcher
+
+
+----------
+
+E2E testing
+Install Protractor:
+npm install -g protractor
+
+Update Selenium driver:
+webdriver-manager update
+
+Start Selenium:
+webdriver-manager start
+
